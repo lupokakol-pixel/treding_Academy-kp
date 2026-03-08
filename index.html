@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trading Academy — Forex</title>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Trading Academy">
+<meta name="theme-color" content="#00ff6a">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg: #020805;
+  --bg2: #050f08;
+  --card: #07120a;
+  --card2: #0a1a0e;
+  --border: #0e2d16;
+  --border2: #163d20;
+  --primary: #00ff6a;
+  --primary-dim: #00c44f;
+  --primary-dark: #007a32;
+  --accent: #39ff88;
+  --glow: rgba(0,255,106,0.15);
+  --glow2: rgba(0,255,106,0.06);
+  --red: #ff3d57;
+  --yellow: #ffe066;
+  --blue: #00d4ff;
+  --text: #c8e8d0;
+  --dim: #3a6647;
+  --dim2: #2a4a35;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  font-family: 'Outfit', sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  cursor: default;
+}
+
+/* Animated scanlines */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,255,106,0.015) 2px,
+    rgba(0,255,106,0.015) 4px
+  );
+  pointer-events: none;
+  z-index: 999;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 0%, rgba(0,255,106,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 100%, rgba(0,196,79,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 30% at 50% 50%, rgba(0,255,106,0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrap { position: relative; z-index: 1; max-width: 920px; margin: 0 auto; padding: 0 20px 80px; }
+
+/* ── HERO ── */
+.hero {
+  text-align: center;
+  padding: 56px 20px 44px;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 30px; left: 50%;
+  transform: translateX(-50%);
+  width: 300px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--primary-dark);
+  color: var(--primary);
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  padding: 7px 20px;
+  border-radius: 2px;
+  margin-bottom: 24px;
+  background: rgba(0,255,106,0.05);
+  box-shadow: 0 0 20px rgba(0,255,106,0.1), inset 0 0 20px rgba(0,255,106,0.03);
+}
+
+.hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 9vw, 96px);
+  letter-spacing: 4px;
+  line-height: 0.95;
+  color: var(--primary);
+  text-shadow:
+    0 0 40px rgba(0,255,106,0.5),
+    0 0 80px rgba(0,255,106,0.2),
+    0 0 120px rgba(0,255,106,0.1);
+  margin-bottom: 8px;
+}
+
+.hero h1 span {
+  display: block;
+  color: #fff;
+  text-shadow: 0 0 30px rgba(255,255,255,0.2);
+}
+
+.hero p {
+  color: var(--dim);
+  font-size: 14px;
+  max-width: 420px;
+  margin: 16px auto 0;
+  line-height: 1.8;
+  letter-spacing: 0.5px;
+}
+
+/* ── PROGRESS ── */
+.progress-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 14px 20px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 0 30px rgba(0,255,106,0.05);
+}
+
+.progress-label { font-size: 11px; color: var(--dim); letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; }
+.progress-track { flex: 1; height: 4px; background: var(--border2); border-radius: 2px; overflow: hidden; position: relative; }
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+  border-radius: 2px;
+  transition: width 0.6s ease;
+  width: 0%;
+  box-shadow: 0 0 10px var(--primary);
+}
+.progress-pct { font-size: 11px; color: var(--primary); font-weight: 700; white-space: nowrap; font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; }
+
+/* ── CHAPTER NAV ── */
+.chapters {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 28px;
+}
+
+@media (max-width: 640px) { .chapters { grid-template-columns: repeat(4, 1fr); } }
+
+.ch-btn {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--dim);
+  padding: 10px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-size: 10px;
+  text-align: center;
+  transition: all 0.2s;
+  line-height: 1.5;
+}
+
+.ch-btn:hover { border-color: var(--primary-dark); color: var(--accent); background: var(--glow2); }
+.ch-btn.done { border-color: var(--primary-dark); color: var(--primary-dim); background: rgba(0,196,79,0.05); }
+.ch-btn.active {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--glow);
+  box-shadow: 0 0 16px rgba(0,255,106,0.15);
+}
+
+/* ── CONTENT CARD ── */
+.content-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 14px;
+  box-shadow: 0 0 40px rgba(0,255,106,0.04), inset 0 1px 0 rgba(0,255,106,0.06);
+}
+
+.card-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(90deg, rgba(0,255,106,0.04) 0%, transparent 60%);
+}
+
+.ch-icon {
+  width: 46px; height: 46px;
+  border-radius: 4px;
+  border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  background: var(--card2);
+}
+
+.card-header h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  letter-spacing: 3px;
+  color: var(--primary);
+  text-shadow: 0 0 20px rgba(0,255,106,0.4);
+}
+
+.card-header .sub { font-size: 11px; color: var(--dim); margin-top: 2px; letter-spacing: 1px; }
+
+.card-body { padding: 24px; }
+
+.section { margin-bottom: 24px; }
+.section:last-child { margin-bottom: 0; }
+
+.section h3 {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--primary-dim);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section h3::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border2), transparent);
+}
+
+/* ── CONCEPT GRID ── */
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 8px;
+}
+
+.concept-box {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 14px;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.concept-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary-dark), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.concept-box:hover { border-color: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,255,106,0.08); }
+.concept-box:hover::before { opacity: 1; }
+
+.concept-box .icon { font-size: 20px; margin-bottom: 8px; }
+.concept-box .title { font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 5px; letter-spacing: 0.5px; }
+.concept-box .desc { font-size: 11px; color: var(--dim); line-height: 1.7; }
+
+/* ── TIMELINE ── */
+.timeline { position: relative; padding-left: 26px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--primary), var(--primary-dark), transparent);
+}
+
+.tl-item {
+  position: relative;
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  transition: border-color 0.2s;
+}
+.tl-item:hover { border-color: var(--border2); }
+
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -20px; top: 50%;
+  transform: translateY(-50%);
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
+  border: 2px solid var(--bg);
+}
+
+.tl-item .step { font-size: 9px; color: var(--primary); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; font-weight: 700; }
+.tl-item .text { font-size: 13px; color: var(--text); line-height: 1.6; }
+
+/* ── CANDLE DEMO ── */
+.candle-demo {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.candle-wrap { text-align: center; }
+.candle-label { font-size: 11px; color: var(--dim); margin-top: 8px; line-height: 1.6; }
+.candle-svg { display: block; margin: 0 auto; }
+
+/* ── INDICATORS ── */
+.ind-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+
+.ind-pill {
+  padding: 7px 16px;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.ind-pill:hover { transform: scale(1.05); box-shadow: 0 0 16px rgba(0,255,106,0.2); }
+
+.ind-desc {
+  display: none;
+  background: var(--card2);
+  border: 1px solid var(--border2);
+  border-left: 2px solid var(--primary);
+  border-radius: 4px;
+  padding: 16px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.8;
+  margin-top: 8px;
+}
+.ind-desc.show { display: block; animation: fadeIn 0.3s; }
+
+/* ── TABLE ── */
+.risk-table { width: 100%; border-collapse: collapse; }
+.risk-table th {
+  background: var(--card2);
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--primary-dim);
+  border-bottom: 1px solid var(--border2);
+}
+.risk-table td {
+  padding: 10px 12px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.risk-table tr:last-child td { border-bottom: none; }
+.risk-table tr:hover td { background: var(--glow2); }
+
+/* ── PSYCH ── */
+.psych-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.psych-card {
+  padding: 14px;
+  border-radius: 4px;
+  border: 1px solid;
+}
+.psych-card.bad { border-color: rgba(255,61,87,0.35); background: rgba(255,61,87,0.04); }
+.psych-card.good { border-color: rgba(0,255,106,0.25); background: rgba(0,255,106,0.04); }
+.psych-card .ph { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+.psych-card.bad .ph { color: var(--red); }
+.psych-card.good .ph { color: var(--primary); }
+.psych-card ul { list-style: none; }
+.psych-card ul li { font-size: 12px; color: var(--text); padding: 3px 0; }
+.psych-card.bad ul li::before { content: '✗  '; color: var(--red); }
+.psych-card.good ul li::before { content: '✓  '; color: var(--primary); }
+
+/* ── QUIZ ── */
+.quiz-box {
+  background: var(--card2);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  padding: 18px;
+}
+.quiz-q { font-size: 14px; font-weight: 600; margin-bottom: 14px; color: var(--accent); line-height: 1.5; }
+.quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+.quiz-opt {
+  padding: 10px 14px;
+  border-radius: 3px;
+  border: 1px solid var(--border2);
+  cursor: pointer;
+  font-size: 12px;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  font-family: 'Outfit', sans-serif;
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+}
+.quiz-opt:hover { border-color: var(--primary-dark); background: var(--glow2); color: var(--accent); }
+.quiz-opt.correct { border-color: var(--primary); background: rgba(0,255,106,0.08); color: var(--primary); }
+.quiz-opt.wrong { border-color: var(--red); background: rgba(255,61,87,0.08); color: var(--red); }
+.quiz-result { margin-top: 10px; font-size: 12px; display: none; padding: 12px; border-radius: 3px; line-height: 1.7; }
+
+/* ── ROADMAP ── */
+.roadmap { display: flex; flex-direction: column; }
+.rm-step {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.rm-step:last-child { border-bottom: none; }
+.rm-num {
+  width: 34px; height: 34px;
+  border-radius: 3px;
+  border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px;
+  flex-shrink: 0; margin-top: 2px;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 1px;
+}
+.rm-content .rm-title { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+.rm-content .rm-desc { font-size: 12px; color: var(--dim); line-height: 1.7; }
+.rm-time { font-size: 10px; padding: 3px 10px; border-radius: 2px; margin-top: 6px; display: inline-block; letter-spacing: 1px; text-transform: uppercase; }
+
+/* ── NAV BUTTONS ── */
+.nav-btns { display: flex; justify-content: space-between; margin-top: 14px; gap: 10px; }
+
+.btn {
+  padding: 12px 28px;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  transition: all 0.2s;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.btn-prev {
+  background: var(--card2);
+  border: 1px solid var(--border2);
+  color: var(--dim);
+}
+.btn-prev:hover { color: var(--text); border-color: var(--dim); }
+.btn-prev:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.btn-next {
+  background: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  box-shadow: 0 0 20px rgba(0,255,106,0.15), inset 0 0 20px rgba(0,255,106,0.03);
+}
+.btn-next:hover {
+  background: var(--primary);
+  color: var(--bg);
+  box-shadow: 0 0 30px rgba(0,255,106,0.4);
+  transform: translateY(-1px);
+}
+
+/* ── UTILITY ── */
+.highlight { color: var(--yellow); font-weight: 700; }
+.highlight-green { color: var(--primary); font-weight: 700; }
+.highlight-red { color: var(--red); font-weight: 700; }
+.highlight-blue { color: var(--blue); font-weight: 700; }
+
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+@keyframes pulse { 0%,100% { box-shadow: 0 0 20px rgba(0,255,106,0.2); } 50% { box-shadow: 0 0 40px rgba(0,255,106,0.5); } }
+
+.chapter-page { display: none; animation: fadeIn 0.35s ease; }
+.chapter-page.active { display: block; }
+
+/* Inputs */
+input[type=number] {
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  padding: 9px 12px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-family: 'Outfit', sans-serif;
+  transition: border-color 0.2s;
+}
+input[type=number]:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 12px rgba(0,255,106,0.15); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--primary-dark); border-radius: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">⚡ Trading Academy</div>
+    <h1>KUASAI<span>FOREX</span></h1>
+    <p>Panduan lengkap dari nol sampai paham — disusun khusus agar mudah & cepat dipahami.</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <span class="progress-label">Progress</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-pct" id="progressPct">0%</span>
+  </div>
+
+  <div class="chapters" id="chapNav"></div>
+
+  <!-- ══════════ CH 1 ══════════ -->
+  <div class="chapter-page active" id="ch0">
+    <div class="content-card">
+      <div class="card-header">
+        <div class="ch-icon">📊</div>
+        <div>
+          <h2>Apa Itu Trading Forex?</h2>
+          <div class="sub">Fondasi Dasar — Bab 1 dari 7</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="section">
+          <h3>Konsep Utama</h3>
+          <div class="concept-grid">
+            <div class="concept-box">
+              <div class="icon">💱</div>
+              <div class="title">Forex = Foreign Exchange</div>
+              <div class="desc">Pasar jual-beli mata uang dunia. Terbesar di dunia — volume $7.5 TRILIUN per hari!</div>
+            </div>
+            <div class="concept-box">
+              <div class="icon">🔁</div>
+              <div class="title">Selalu Berpasangan</div>
+              <div class="desc">Kamu selalu beli satu mata uang & jual yang lain. Contoh: EUR/USD = Euro vs Dollar.</div>
+            </div>
+            <div class="concept-box">
+              <div class="icon">⏰</div>
+              <div class="title">24 Jam 5 Hari</div>
+              <div class="desc">Pasar buka Senin–Jumat, 24 jam nonstop. Melewati sesi Asia, Eropa, Amerika.</div>
+            </div>
+            <div class="concept-box">
+              <div class="icon">📈</div>
+              <div class="title">Profit 2 Arah</div>
+              <div class="desc">Bisa cuan saat harga naik (BUY) maupun turun (SELL). Inilah keunikan forex!</div>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <h3>Istilah Wajib Tahu</h3>
+          <table class="risk-table">
+            <thead><tr><th>Istilah</th><th>Artinya</th><th>Contoh</th></tr></thead>
+            <tbody>
+              <tr><td><span class="highlight-green">Pip</span></td><td>Satuan pergerakan harga terkecil</td><td>EUR/USD: 1.0923 → 1.0924 = 1 pip</td></tr>
+              <tr><td><span class="highlight-green">Lot</span></td><td>Ukuran volume transaksi</td><td>1 Lot = 100.000 unit mata uang</td></tr>
+              <tr><td><span class="highlight-green">Spread</span></td><td>Selisih harga beli & jual (biaya)</td><td>Ask 1.0925 – Bid 1.0923 = 2 pip</td></tr>
+              <tr><td><span class="highlight-green">Leverage</span></td><td>Modal diperbesar broker</td><td>1:100 = modal $100 → buka $10.000</td></tr>
+              <tr><td><span class="highlight-green">Margin</span></td><td>Jaminan untuk buka posisi</td><td>Minimal saldo yg harus ada</td></tr>
+              <tr><td><span class="highlight-green">SL / TP</span></td><td>Stop Loss / Take Profit</td><td>Batas rugi & batas untung otomatis</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn btn-prev" disabled>← Kembali</button>
+      <button class="btn btn-next" onclick="goNext()">Selanjutnya →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ CH 2 ══════════ -->
+  <div class="chapter-page" id="ch1">
+    <div class="content-card">
+      <div class="card-header">
+        <div class="ch-icon">🕯️</div>
+        <div>
+          <h2>Membaca Candlestick</h2>
+          <div class="sub">Analisa Teknikal — Bab 2 dari 7</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="section">
+          <h3>Anatomi Candlestick</h3>
+          <div class="candle-demo">
+            <div class="candle-wrap">
+              <svg class="candle-svg" width="40" height="120" viewBox="0 0 40 120">
+                <line x1="20" y1="5" x2="20" y2="25" stroke="#00ff6a" stroke-width="2"/>
+                <rect x="8" y="25" width="24" height="50" fill="#00ff6a" rx="1"/>
+                <line x1="20" y1="75" x2="20" y2="100" stroke="#00ff6a" stroke-width="2"/>
+              </svg>
+              <div class="candle-label" style="color:var(--primary)">BULLISH<br>Close > Open</div>
+            </div>
+            <div style="font-size:11px;color:var(--dim);line-height:2.2;text-align:left">
+              <div>↑ <span style="color:var(--text)">Upper Wick (ekor atas)</span></div>
+              <div>↕ <span style="color:var(--text)">Body (badan candle)</span></div>
+              <div>→ Open price</div>
+              <div>→ Close price</div>
+              <div>↓ <span style="color:var(--text)">Lower Wick (ekor bawah)</span></div>
+            </div>
+            <div class="candle-wrap">
+              <svg class="candle-svg" width="40" height="120" viewBox="0 0 40 120">
+                <line x1="20" y1="5" x2="20" y2="25" stroke="#ff3d57" stroke-width="2"/>
+                <rect x="8" y="25" width="24" height="50" fill="#ff3d57" rx="1"/>
+                <line x1="20" y1="75" x2="20" y2="100" stroke="#ff3d57" stroke-width="2"/>
+              </svg>
+              <div class="candle-label" style="color:var(--red)">BEARISH<br>Close < Open</div>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <h3>Pola Candlestick Penting</h3>
+          <div class="concept-grid">
+            <div class="concept-box" style="border-color:rgba(0,255,106,0.2)">
+              <div class="icon">🔨</div>
+              <div class="title" style="color:var(--primary)">Hammer</div>
+              <div class="desc">Ekor panjang di bawah. Sinyal <strong style="color:var(--primary)">BELI</strong> — harga akan berbalik naik dari support.</div>
+            </div>
+            <div class="concept-box" style="border-color:rgba(255,61,87,0.2)">
+              <div class="icon">☄️</div>
+              <div class="title" style="color:var(--red)">Shooting Star</div>
+              <div class="desc">Ekor panjang di atas. Sinyal <strong style="color:var(--red)">JUAL</strong> — harga akan berbalik turun dari resistance.</div>
+            </div>
+            <div class="concept-box" style="border-color:rgba(0,255,106,0.2)">
+              <div class="icon">🟢</div>
+              <div class="title" style="color:var(--primary)">Bullish Engulfing</div>
+              <div class="desc">Candle hijau menelan candle merah. Sinyal <strong style="color:var(--primary)">BELI KUAT.</strong></div>
+            </div>
+            <div class="concept-box" style="border-color:rgba(255,61,87,0.2)">
+              <div class="icon">🔴</div>
+              <div class="title" style="color:var(--red)">Bearish Engulfing</div>
+              <div class="desc">Candle merah menelan candle hijau. Sinyal <strong style="color:var(--red)">JUAL KUAT.</strong></div>
+            </div>
+            <div class="concept-box">
+              <div class="icon">➕</div>
+              <div class="title" style="color:var(--yellow)">Doji</div>
+              <div class="desc">Open = Close. Harga ragu-ragu. Bisa jadi sinyal pembalikan — tunggu konfirmasi.</div>
+            </div>
+            <div class="concept-box">
+              <div class="icon">⭐</div>
+              <div class="title" style="color:var(--yellow)">Morning Star</div>
+              <div class="desc">3 candle: merah → doji → hijau. Sinyal <strong style="color:var(--primary)">BELI</strong> sangat kuat.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn btn-prev" onclick="goPrev()">← Kembali</button>
+      <button class="btn btn-next" onclick="goNext()">Selanjutnya →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ CH 3 ══════════ -->
+  <div class="chapter-page" id="ch2">
+    <div class="content-card">
+      <div class="card-header">
+        <div class="ch-icon">📉</div>
+        <div>
+          <h2>Support, Resistance & Trend</h2>
+          <div class="sub">Analisa Teknikal Lanjut — Bab 3 dari 7</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="section">
+          <h3>Support & Resistance</h3>
+          <div class="concept-grid">
+            <div class="concept-box" style="border-color:rgba(0,255,106,0.25)">
+              <div class="icon">🛡️</div>
+              <div class="title" style="color:var(--primary)">Support (Lantai)</div>
+              <div class="desc">Level harga di mana banyak pembeli masuk → harga cenderung <strong style="color:var(--primary)">MANTUL NAIK.</strong> Area BUY terbaik!</div>
+            </div>
+            <div class="concept-box" style="border-color:rgba(255,61,87,0.25)">
+              <div class="icon">🚧</div>
+              <div class="title" style="color:var(--red)">Resistance (Atap)</div>
+              <div class="desc">Level harga di mana banyak penjual masuk → harga cenderung <strong style="color:var(--red)">BERBALIK TURUN.</strong> Area SELL terbaik!</div>
+            </div>
+          </div>
+          <div style="background:var(--card2);border:1px solid var(--border2);border-left:2px solid var(--primary);border-radius:4px;padding:14px;margin-top:10px;font-size:13px;color:var(--dim);line-height:1.8;">
+            💡 <span style="color:var(--primary);font-weight:700">Rumus Penting:</span> Resistance yang tertembus → <span class="highlight-green">Support baru</span>. Support yang jebol → <span class="highlight-red">Resistance baru</span>.
+          </div>
+        </div>
+        <div class="section">
+          <h3>3 Jenis Trend</h3>
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="step">Uptrend (Naik)</div>
+              <div class="text">📈 <span class="highlight-green">Higher High + Higher Low</span> — Harga terus membuat puncak lebih tinggi. Strategi: <strong>BUY saat pullback ke support.</strong></div>
+            </div>
+            <div class="tl-item">
+              <div class="step" style="color:var(--red)">Downtrend (Turun)</div>
+              <div class="text">📉 <span class="highlight-red">Lower High + Lower Low</span> — Harga terus membuat lembah lebih rendah. Strategi: <strong>SELL saat rebound ke resistance.</strong></div>
+            </div>
+            <div class="tl-item">
+              <div class="step" style="color:var(--yellow)">Sideways (Ranging)</div>
+              <div class="text">↔️ <span class="highlight">Harga bergerak datar</span> dalam range tertentu. Strategi: <strong>BUY di support bawah, SELL di resistance atas.</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn btn-prev" onclick="goPrev()">← Kembali</button>
+      <button class="btn btn-next" onclick="goNext()">Selanjutnya →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ CH 4 ══════════ -->
+  <div class="chapter-page" id="ch3">
+    <div class="content-card">
+      <div class="card-header">
+        <div class="ch-icon">🔧</div>
+        <div>
+          <h2>Indikator Teknikal</h2>
+          <div class="sub">Alat Bantu Analisa — Bab 4 dari 7</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="section">
+          <h3>Klik untuk Pelajari Tiap Indikator</h3>
+          <div class="ind-row">
+            <div class="ind-pill" style="border-color:var(--primary);color:var(--primary)" onclick="showInd(this,'rsi')">RSI</div>
+            <div class="ind-pill" style="border-color:var(--blue);color:var(--blue)" onclick="showInd(this,'macd')">MACD</div>
+            <div class="ind-pill" style="border-color:var(--yellow);color:var(--yellow)" onclick="showInd(this,'ema')">EMA</div>
+            <div class="ind-pill" style="border-color:var(--accent);color:var(--accent)" onclick="showInd(this,'bb')">Bollinger Bands</div>
+            <div class="ind-pill" style="border-color:var(--red);color:var(--red)" onclick="showInd(this,'stoch')">Stochastic</div>
+            <div class="ind-pill" style="border-color:#ff9f43;color:#ff9f43" onclick="showInd(this,'fib')">Fibonacci</div>
+          </div>
+          <div class="ind-desc" id="ind-rsi">
+            <strong style="color:var(--primary)">RSI — Relative Strength Index</strong><br><br>
+            Mengukur kekuatan/kelemahan harga dalam skala 0–100.<br><br>
+            🔴 <strong>RSI &gt; 70</strong> = <span class="highlight-red">OVERBOUGHT</span> → harga terlalu tinggi, siap TURUN.<br>
+            🟢 <strong>RSI &lt; 30</strong> = <span class="highlight-green">OVERSOLD</span> → harga terlalu rendah, siap NAIK.<br>
+            ⚪ <strong>RSI 50</strong> = zona netral.<br><br>
+            <em style="color:var(--dim)">Setting terbaik: RSI (14). Cocok untuk semua timeframe.</em>
+          </div>
+          <div class="ind-desc" id="ind-macd">
+            <strong style="color:var(--blue)">MACD — Moving Average Convergence Divergence</strong><br><br>
+            Mendeteksi momentum & perubahan tren menggunakan 2 garis EMA.<br><br>
+            🟢 <strong>MACD memotong Signal ke ATAS</strong> = sinyal <span class="highlight-green">BUY</span>.<br>
+            🔴 <strong>MACD memotong Signal ke BAWAH</strong> = sinyal <span class="highlight-red">SELL</span>.<br>
+            📊 <strong>Histogram hijau membesar</strong> = momentum bullish menguat.<br><br>
+            <em style="color:var(--dim)">Setting standar: 12, 26, 9. Cocok untuk M30 ke atas.</em>
+          </div>
+          <div class="ind-desc" id="ind-ema">
+            <strong style="color:var(--yellow)">EMA — Exponential Moving Average</strong><br><br>
+            Rata-rata harga yang lebih sensitif terhadap pergerakan terbaru.<br><br>
+            🟢 <strong>Harga di ATAS EMA</strong> = trend <span class="highlight-green">BULLISH</span> → fokus BUY.<br>
+            🔴 <strong>Harga di BAWAH EMA</strong> = trend <span class="highlight-red">BEARISH</span> → fokus SELL.<br>
+            💛 <strong>EMA 20 potong EMA 50 ke atas</strong> = "Golden Cross" sinyal BUY kuat.<br><br>
+            <em style="color:var(--dim)">Paling umum: EMA 20, EMA 50, EMA 200.</em>
+          </div>
+          <div class="ind-desc" id="ind-bb">
+            <strong style="color:var(--accent)">Bollinger Bands</strong><br><br>
+            3 garis: Upper Band, Middle Band (EMA 20), Lower Band. Mengukur volatilitas.<br><br>
+            🟢 <strong>Harga menyentuh Lower Band</strong> = oversold → <span class="highlight-green">BUY</span>.<br>
+            🔴 <strong>Harga menyentuh Upper Band</strong> = overbought → <span class="highlight-red">SELL</span>.<br>
+            💡 <strong>Bands Squeeze (menyempit)</strong> = siap-siap breakout besar!<br><br>
+            <em style="color:var(--dim)">Setting: 20 periode, 2 standar deviasi.</em>
+          </div>
+          <div class="ind-desc" id="ind-stoch">
+            <strong style="color:var(--red)">Stochastic Oscillator</strong><br><br>
+            Mirip RSI, mengukur posisi harga dalam range tertentu. Skala 0–100.<br><br>
+            🔴 <strong>Stoch &gt; 80</strong> = <span class="highlight-red">OVERBOUGHT</span> → siap turun.<br>
+            🟢 <strong>Stoch &lt; 20</strong> = <span class="highlight-green">OVERSOLD</span> → siap naik.<br>
+            ⚡ <strong>%K memotong %D</strong> = sinyal entry yang akurat.<br><br>
+            <em style="color:var(--dim)">Sangat cocok untuk scalping M5–M15!</em>
+          </div>
+          <div class="ind-desc" id="ind-fib">
+            <strong style="color:#ff9f43">Fibonacci Retracement</strong><br><br>
+            Level koreksi harga berdasarkan rasio matematika golden ratio.<br><br>
+            ⭐ <strong>Level 61.8%</strong> = <span style="color:#ff9f43">GOLDEN RATIO</span> → entry terkuat!<br>
+            💪 <strong>Level 38.2% & 50%</strong> = support/resistance kuat.<br>
+            🎯 Tarik dari swing low ke swing high → tunggu koreksi ke 61.8% → BUY!<br><br>
+            <em style="color:var(--dim)">Kombinasikan dengan RSI untuk konfirmasi terbaik.</em>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn btn-prev" onclick="goPrev()">← Kembali</button>
+      <button class="btn btn-next" onclick="goNext()">Selanjutnya →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ CH 5 ══════════ -->
+  <div class="chapter-page" id="ch4">
+    <div class="content-card">
+      <div class="card-header">
+        <div class="ch-icon">🛡️</div>
+        <div>
+          <h2>Manajemen Risiko</h2>
+          <div class="sub">Kunci Survive — Bab 5 dari 7</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="section">
+          <h3>Aturan Emas Trading</h3>
+          <div class="timeline">
+            <div class="tl-item" style="border-color:rgba(255,61,87,0.3)">
+              <div class="step" style="color:var(--red)">Aturan #1 — Risk Per Trade</div>
+              <div class="text">Jangan risiko lebih dari <span class="highlight-red">1–2% per trade</span> dari total modal. Modal $1000 → max rugi $20 per trade.</div>
+            </div>
+            <div class="tl-item" style="border-color:rgba(255,224,102,0.3)">
+              <div class="step" style="color:var(--yellow)">Aturan #2 — Risk:Reward Ratio</div>
+              <div class="text">Minimal <span class="highlight">1:2</span>. SL 10 pip → TP minimal 20 pip. Winrate 50% saja kamu tetap <span class="highlight-green">PROFIT!</span></div>
+            </div>
+            <div class="tl-item" style="border-color:rgba(0,255,106,0.25)">
+              <div class="step">Aturan #3 — Stop Loss WAJIB</div>
+              <div class="text">SELALU pasang Stop Loss sebelum entry. Tidak ada SL = <span class="highlight-red">BUNUH DIRI</span> dalam trading.</div>
+            </div>
+            <div class="tl-item">
+              <div class="step">Aturan #4 — Jangan Revenge Trading</div>
+              <div class="text">Setelah loss, <span class="highlight-green">berhenti dulu</span>. Jangan buru-buru balas rugi. Emosi = musuh terbesar trader.</div>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <h3>Kalkulator Lot Size</h3>
+          <div style="background:var(--card2);border:1px solid var(--border2);border-radius:4px;padding:16px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
+              <div>
+                <div style="font-size:10px;color:var(--dim);margin-bottom:6px;letter-spacing:2px;text-transform:uppercase">Modal ($)</div>
+                <input type="number" id="modal" value="1000" oninput="calcLot()">
+              </div>
+              <div>
+                <div style="font-size:10px;color:var(--dim);margin-bottom:6px;letter-spacing:2px;text-transform:uppercase">Risk (%)</div>
+                <input type="number" id="riskPct" value="2" oninput="calcLot()">
+              </div>
+              <div>
+                <div style="font-size:10px;color:var(--dim);margin-bottom:6px;letter-spacing:2px;text-transform:uppercase">SL (pip)</div>
+                <input type="number" id="slPip" value="20" oninput="calcLot()">
+              </div>
+            </div>
+            <div style="background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center">
+              <div>
+                <div style="font-size:9px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Max Risk</div>
+                <div id="res-risk" style="color:var(--red);font-size:20px;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:2px">$20</div>
+              </div>
+              <div>
+                <div style="font-size:9px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">Lot Size</div>
+                <div id="res-lot" style="color:var(--primary);font-size:20px;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;text-shadow:0 0 12px rgba(0,255,106,0.5)">0.10</div>
+              </div>
+              <div>
+                <div style="font-size:9px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">TP 1:2</div>
+                <div id="res-tp" style="color:var(--accent);font-size:20px;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:2px">40p</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn btn-prev" onclick="goPrev()">← Kembali</button>
+      <button class="btn btn-next" onclick="goNext()">Selanjutnya →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ CH 6 ══════════ -->
+  <div class="chapter-page" id="ch5">
+    <div class="content-card">
+      <div class="card-header">
+        <div class="ch-icon">🧠</div>
+        <div>
+          <h2>Psikologi Trading</h2>
+          <div class="sub">Mental Juara — Bab 6 dari 7</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="section">
+          <h3>Musuh Terbesar Trader</h3>
+          <div class="psych-grid">
+            <div class="psych-card bad">
+              <div class="ph">✗ Kebiasaan Buruk</div>
+              <ul>
+                <li>FOMO (takut ketinggalan)</li>
+                <li>Revenge trading</li>
+                <li>Overtrading</li>
+                <li>Pindah SL saat rugi</li>
+                <li>Tutup TP terlalu cepat</li>
+                <li>Tidak punya rencana</li>
+                <li>Trading saat emosi</li>
+              </ul>
+            </div>
+            <div class="psych-card good">
+              <div class="ph">✓ Kebiasaan Juara</div>
+              <ul>
+                <li>Punya trading plan</li>
+                <li>Disiplin & sabar</li>
+                <li>Belajar dari loss</li>
+                <li>SL & TP tidak diubah</li>
+                <li>Hanya 1–3 setup/hari</li>
+                <li>Jurnal setiap trade</li>
+                <li>Trading saat pikiran jernih</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <h3>Mindset Trader Profesional</h3>
+          <div class="concept-grid">
+            <div class="concept-box">
+              <div class="icon">📊</div>
+              <div class="title">Probabilitas</div>
+              <div class="desc">Trading bukan soal menang 1 trade. Fokus pada <strong>100 trade ke depan</strong>. Edge yang baik = profit konsisten.</div>
+            </div>
+            <div class="concept-box">
+              <div class="icon">📝</div>
+              <div class="title">Trading Journal</div>
+              <div class="desc">Catat setiap trade: setup, entry, exit, perasaan. Cara tercepat berkembang jadi trader handal.</div>
+            </div>
+            <div class="concept-box">
+              <div class="icon">🎯</div>
+              <div class="title">Proses vs Hasil</div>
+              <div class="desc">Fokus <strong>eksekusi yang benar</strong>, bukan hasil. Trade yang loss tapi sesuai rencana = trade yang BAGUS.</div>
+            </div>
+            <div class="concept-box">
+              <div class="icon">⏸️</div>
+              <div class="title">Tahu Kapan Berhenti</div>
+              <div class="desc">Batasi max loss harian (misal 3%). Kena batas? <strong>Stop trading.</strong> Pasar selalu ada besok.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn btn-prev" onclick="goPrev()">← Kembali</button>
+      <button class="btn btn-next" onclick="goNext()">Selanjutnya →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ CH 7 ══════════ -->
+  <div class="chapter-page" id="ch6">
+    <div class="content-card">
+      <div class="card-header">
+        <div class="ch-icon">🚀</div>
+        <div>
+          <h2>Roadmap & Quiz Akhir</h2>
+          <div class="sub">Langkah Selanjutnya — Bab 7 dari 7</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="section">
+          <h3>Roadmap Pemula → Pro</h3>
+          <div class="roadmap">
+            <div class="rm-step">
+              <div class="rm-num" style="background:rgba(0,255,106,0.1);color:var(--primary);border-color:var(--primary-dark)">01</div>
+              <div class="rm-content">
+                <div class="rm-title">Pelajari Dasar (Sekarang!)</div>
+                <div class="rm-desc">Candlestick, S/R, trend, indikator dasar. Pahami benar sebelum lanjut ke tahap berikutnya.</div>
+                <span class="rm-time" style="background:rgba(0,255,106,0.08);color:var(--primary);border:1px solid var(--primary-dark)">1–2 Bulan</span>
+              </div>
+            </div>
+            <div class="rm-step">
+              <div class="rm-num" style="background:rgba(0,212,255,0.1);color:var(--blue);border-color:rgba(0,212,255,0.3)">02</div>
+              <div class="rm-content">
+                <div class="rm-title">Demo Trading</div>
+                <div class="rm-desc">Latihan di akun demo (uang virtual). Target: profit konsisten 2–3 bulan berturut-turut.</div>
+                <span class="rm-time" style="background:rgba(0,212,255,0.08);color:var(--blue);border:1px solid rgba(0,212,255,0.2)">2–3 Bulan</span>
+              </div>
+            </div>
+            <div class="rm-step">
+              <div class="rm-num" style="background:rgba(255,224,102,0.1);color:var(--yellow);border-color:rgba(255,224,102,0.3)">03</div>
+              <div class="rm-content">
+                <div class="rm-title">Live Modal Kecil</div>
+                <div class="rm-desc">Mulai dengan modal kecil ($50–$100). Rasakan emosi trading nyata. Terapkan manajemen risiko ketat.</div>
+                <span class="rm-time" style="background:rgba(255,224,102,0.08);color:var(--yellow);border:1px solid rgba(255,224,102,0.2)">3–6 Bulan</span>
+              </div>
+            </div>
+            <div class="rm-step">
+              <div class="rm-num" style="background:rgba(0,255,106,0.08);color:var(--accent);border-color:var(--border2)">04</div>
+              <div class="rm-content">
+                <div class="rm-title">Kembangkan Strategy</div>
+                <div class="rm-desc">Temukan 1–2 setup cocok dengan karakter kamu. Backtest & forward test. Buat trading plan tertulis.</div>
+                <span class="rm-time" style="background:rgba(0,255,106,0.06);color:var(--accent);border:1px solid var(--border2)">6–12 Bulan</span>
+              </div>
+            </div>
+            <div class="rm-step">
+              <div class="rm-num" style="background:rgba(0,255,106,0.15);color:var(--primary);border-color:var(--primary-dark)">05</div>
+              <div class="rm-content">
+                <div class="rm-title">Scale Up & Konsisten</div>
+                <div class="rm-desc">Profit konsisten 6 bulan+, tambah modal bertahap. Fokus pada proses, bukan jumlah profit.</div>
+                <span class="rm-time" style="background:rgba(0,255,106,0.1);color:var(--primary);border:1px solid var(--primary-dark)">1 Tahun+</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Quiz — Uji Pemahamanmu</h3>
+          <div class="quiz-box" id="quizBox">
+            <div class="quiz-q" id="qText"></div>
+            <div class="quiz-opts" id="qOpts"></div>
+            <div class="quiz-result" id="qResult"></div>
+            <div style="margin-top:12px;text-align:right">
+              <button class="btn btn-next" id="qNext" onclick="nextQ()" style="display:none;padding:8px 18px;font-size:11px">Lanjut →</button>
+            </div>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--dim);text-align:center;letter-spacing:1px" id="qProgress"></div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn btn-prev" onclick="goPrev()">← Kembali</button>
+      <button class="btn btn-next" style="border-color:var(--primary);color:var(--primary);background:rgba(0,255,106,0.1)" onclick="finish()">🎉 Selesai!</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const chapters = [
+  { icon:'📊', label:'Forex Dasar' },
+  { icon:'🕯️', label:'Candlestick' },
+  { icon:'📉', label:'S/R & Trend' },
+  { icon:'🔧', label:'Indikator' },
+  { icon:'🛡️', label:'Risk Mgmt' },
+  { icon:'🧠', label:'Psikologi' },
+  { icon:'🚀', label:'Roadmap' },
+];
+
+let current = 0;
+const done = new Set();
+
+function buildNav() {
+  document.getElementById('chapNav').innerHTML = chapters.map((c,i) => `
+    <button class="ch-btn ${i===current?'active':''} ${done.has(i)&&i!==current?'done':''}" onclick="goTo(${i})">
+      ${c.icon}<br>${c.label}
+    </button>`).join('');
+}
+
+function updateProgress() {
+  const pct = Math.round((done.size / chapters.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
+function goTo(idx) {
+  document.getElementById('ch'+current).classList.remove('active');
+  done.add(current);
+  current = idx;
+  document.getElementById('ch'+current).classList.add('active');
+  buildNav(); updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goNext() { if (current < chapters.length-1) goTo(current+1); }
+function goPrev() { if (current > 0) goTo(current-1); }
+
+let activeInd = null;
+function showInd(el, id) {
+  document.querySelectorAll('.ind-desc').forEach(d => d.classList.remove('show'));
+  if (activeInd === id) { activeInd = null; return; }
+  document.getElementById('ind-'+id).classList.add('show');
+  activeInd = id;
+}
+
+function calcLot() {
+  const modal = parseFloat(document.getElementById('modal').value)||0;
+  const riskPct = parseFloat(document.getElementById('riskPct').value)||0;
+  const sl = parseFloat(document.getElementById('slPip').value)||1;
+  const maxRisk = modal * riskPct / 100;
+  const lot = (maxRisk / (sl * 10)).toFixed(2);
+  document.getElementById('res-risk').textContent = '$'+maxRisk.toFixed(0);
+  document.getElementById('res-lot').textContent = lot;
+  document.getElementById('res-tp').textContent = (sl*2)+'p';
+}
+
+const questions = [
+  { q:'RSI di angka 25 menunjukkan kondisi...', opts:['Overbought – siap turun','Oversold – siap naik','Netral','Trend kuat'], ans:1, exp:'✅ RSI < 30 = OVERSOLD → harga terlalu murah, siap naik!' },
+  { q:'Candlestick "Hammer" adalah sinyal...', opts:['SELL kuat','BUY – harga akan naik','Sideways','Breakout'], ans:1, exp:'✅ Hammer = ekor panjang di bawah → pembeli mengambil alih → sinyal BUY!' },
+  { q:'Level Fibonacci terkuat untuk scalping adalah...', opts:['23.6%','38.2%','61.8% (Golden Ratio)','100%'], ans:2, exp:'✅ 61.8% = Golden Ratio – level terkuat & paling sering dipakai trader profesional!' },
+  { q:'Risk per trade yang direkomendasikan adalah...', opts:['10–20%','5–10%','1–2%','Tidak perlu batasan'], ans:2, exp:'✅ Maksimal 1–2% per trade! Melindungi modal agar tidak habis saat kalah beruntun.' },
+  { q:'Resistance yang berhasil ditembus akan menjadi...', opts:['Support baru','Resistance lebih kuat','Zona netral','Level Fibonacci'], ans:0, exp:'✅ Resistance yang jebol = Support baru. Konsep fundamental analisa teknikal!' },
+];
+
+let qIdx=0, score=0;
+
+function loadQ() {
+  const q = questions[qIdx];
+  document.getElementById('qText').textContent = `Q${qIdx+1}. ${q.q}`;
+  document.getElementById('qOpts').innerHTML = q.opts.map((o,i)=>
+    `<button class="quiz-opt" onclick="ansQ(this,${i})">${o}</button>`).join('');
+  document.getElementById('qResult').style.display = 'none';
+  document.getElementById('qNext').style.display = 'none';
+  document.getElementById('qProgress').textContent = `Pertanyaan ${qIdx+1} dari ${questions.length}  |  Skor: ${score}/${questions.length}`;
+}
+
+function ansQ(el, i) {
+  const q = questions[qIdx];
+  document.querySelectorAll('.quiz-opt').forEach(b => b.style.pointerEvents='none');
+  const r = document.getElementById('qResult');
+  if (i === q.ans) {
+    el.classList.add('correct'); score++;
+    r.style.cssText = 'display:block;background:rgba(0,255,106,0.08);color:#00ff6a;border-left:2px solid #00ff6a';
+    r.textContent = q.exp;
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt')[q.ans].classList.add('correct');
+    r.style.cssText = 'display:block;background:rgba(255,61,87,0.08);color:#ff3d57;border-left:2px solid #ff3d57';
+    r.textContent = '✗ Kurang tepat. ' + q.exp;
+  }
+  if (qIdx < questions.length-1) {
+    document.getElementById('qNext').style.display = 'inline-block';
+  } else {
+    const grade = score >= 4 ? 'Luar Biasa! Kamu siap trading! 🚀' : score >= 3 ? 'Bagus! Ulangi materi yang kurang 💪' : 'Ulangi belajar dari awal, kamu pasti bisa! 📚';
+    setTimeout(()=>{ r.innerHTML += `<br><br><strong style="color:#00ff6a">SKOR AKHIR: ${score}/${questions.length} — ${grade}</strong>`; },300);
+  }
+  document.getElementById('qProgress').textContent = `Pertanyaan ${qIdx+1} dari ${questions.length}  |  Skor: ${score}/${questions.length}`;
+}
+
+function nextQ() { qIdx++; loadQ(); }
+
+function finish() {
+  done.add(current); updateProgress();
+  alert('🎉 SELESAI!\n\nKamu sudah menyelesaikan semua materi Trading Academy!\n\nIngat: Mulai dari Demo Trading dulu. Konsisten > Cepat Kaya! 💪');
+}
+
+buildNav(); updateProgress(); loadQ(); calcLot();
+
+// PWA Install
+let deferredPrompt;
+const banner = document.getElementById('installBanner');
+const installBtn = document.getElementById('installBtn');
+const dismissBtn = document.getElementById('dismissBtn');
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  banner.style.display = 'flex';
+});
+
+if (installBtn) {
+  installBtn.addEventListener('click', async () => {
+    banner.style.display = 'none';
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+    }
+  });
+}
+
+if (dismissBtn) {
+  dismissBtn.addEventListener('click', () => {
+    banner.style.display = 'none';
+  });
+}
+
+window.addEventListener('appinstalled', () => {
+  banner.style.display = 'none';
+});
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('SW registered:', reg.scope))
+      .catch(err => console.log('SW error:', err));
+  });
+}
+</script>
+
+<!-- Install Banner -->
+<div id="installBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#07120a;border-top:1px solid #00ff6a;padding:14px 20px;align-items:center;gap:12px;box-shadow:0 -4px 30px rgba(0,255,106,0.15)">
+  <span style="font-size:22px">📱</span>
+  <div style="flex:1">
+    <div style="font-size:13px;font-weight:700;color:#00ff6a;font-family:'Bebas Neue',sans-serif;letter-spacing:2px">INSTALL TRADING ACADEMY</div>
+    <div style="font-size:11px;color:#3a6647;margin-top:2px">Simpan ke layar utama HP — bisa pakai offline!</div>
+  </div>
+  <button id="installBtn" style="background:#00ff6a;color:#020805;border:none;padding:9px 18px;border-radius:3px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;letter-spacing:1px;text-transform:uppercase">Install</button>
+  <button id="dismissBtn" style="background:transparent;color:#3a6647;border:1px solid #0e2d16;padding:9px 14px;border-radius:3px;font-size:11px;cursor:pointer;font-family:'Outfit',sans-serif">✕</button>
+</div>
+</body>
+</html>
